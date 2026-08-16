@@ -18,14 +18,7 @@ public class OrderBook{
             OrderQueue queue = asks.get(bestAsk);
             LimitOrder sellOrder = queue.getHead().order;
             long tradeQuantity = Math.min(buy.getQuantity(), sellOrder.getQuantity());
-            events.add(
-                new TradeExecuted(
-                    buy.getOrderID(),
-                    sellOrder.getOrderID(),
-                    sellOrder.getPrice(),
-                    tradeQuantity
-                )
-            );
+            events.add( new TradeExecuted( buy.getOrderID(), sellOrder.getOrderID(), sellOrder.getPrice(), tradeQuantity));
             buy.reduceQuantity(tradeQuantity);
             sellOrder.reduceQuantity(tradeQuantity);
             if (sellOrder.getQuantity() == 0) {
@@ -89,14 +82,7 @@ public class OrderBook{
             OrderQueue queue = bids.get(bestBid);
             LimitOrder buyOrder = queue.getHead().order;
             long tradeQuantity = Math.min(sell.getQuantity(), buyOrder.getQuantity());
-            events.add(
-                new TradeExecuted(
-                    buyOrder.getOrderID(),
-                    sell.getOrderID(),
-                    buyOrder.getPrice(),
-                    tradeQuantity
-                )
-            );
+            events.add(new TradeExecuted(buyOrder.getOrderID(), sell.getOrderID(), buyOrder.getPrice(), tradeQuantity));
             sell.reduceQuantity(tradeQuantity);
             buyOrder.reduceQuantity(tradeQuantity);
             if (buyOrder.getQuantity() == 0) {

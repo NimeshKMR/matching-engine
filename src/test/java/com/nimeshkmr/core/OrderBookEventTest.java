@@ -3,11 +3,8 @@ package com.nimeshkmr.core;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.math.BigDecimal;
-
 import org.junit.jupiter.api.Test;
-
 import com.nimeshkmr.events.EngineEvent;
 import com.nimeshkmr.events.OrderAccepted;
 import com.nimeshkmr.events.OrderResult;
