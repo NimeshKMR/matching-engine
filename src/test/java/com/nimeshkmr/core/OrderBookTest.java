@@ -104,7 +104,7 @@ public class OrderBookTest {
         book.placeOrder(first);
 
         assertThrows(
-                IllegalArgumentException.class,
+                DuplicateOrderIDException.class,
                 () -> book.placeOrder(duplicate)
         );
 

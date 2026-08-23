@@ -102,7 +102,7 @@ public class OrderBook{
         return trades;
     }
 
-    public boolean removeOrder(Long orderID){
+    public boolean removeOrder(long orderID){
         if(!orders.containsKey(orderID)){
             return false;
         }
@@ -126,9 +126,23 @@ public class OrderBook{
         return true;
     }
 
+    public OrderResult cancelOrder(long orderID, long accountID) {
+        OrderNode node = orders.get(orderID);
+        if (node == null) {
+            throw new OrderNotFoundException("Order not found");
+        }
+        if (node.order.getAccountID() != accountID) {
+            throw new UnauthorizedOrderCancellationException("Order does not belong to account");
+        }
+        removeOrder(orderID);
+        OrderCancelled event =
+            new OrderCancelled(node.order.getOrderID(), node.order.getAccountID());
+        return new OrderResult(orderID, List.of(event));
+    }
+
     public OrderResult processOrder(Order order){
         if (orders.containsKey(order.getOrderID())) {
-            throw new IllegalArgumentException("Duplicate order ID");
+            throw new DuplicateOrderIDException("Duplicate order ID");
         }
         List<EngineEvent> events = new ArrayList<>();
         events.add(new OrderAccepted(order.getOrderID(), order.getAccountID()));
@@ -169,6 +183,36 @@ public class OrderBook{
                 oq.append(node);
             }
             orders.put(order.getOrderID(), node);
+    }
+
+    public OrderBookSnapshot getSnapshot(){
+        List<OrderBookLevel> asksBookLevels = new ArrayList<>();
+        List<OrderBookLevel> bidsBookLevels = new ArrayList<>();
+        for(Map.Entry<BigDecimal, OrderQueue> entry : asks.entrySet()){
+            BigDecimal price = entry.getKey();
+            OrderQueue queue = entry.getValue();
+            OrderNode temp = queue.getHead();
+            long totalQuantity = 0;
+            while(temp!=null){
+                totalQuantity += temp.order.getQuantity();
+                temp = temp.next;
+            }
+            OrderBookLevel level = new OrderBookLevel(price, totalQuantity);
+            asksBookLevels.add(level);
+        }
+        for(Map.Entry<BigDecimal, OrderQueue> entry : bids.entrySet()){
+            BigDecimal price = entry.getKey();
+            OrderQueue queue = entry.getValue();
+            OrderNode temp = queue.getHead();
+            long totalQuantity = 0;
+            while(temp!=null){
+                totalQuantity += temp.order.getQuantity();
+                temp = temp.next;
+            }
+            OrderBookLevel level = new OrderBookLevel(price, totalQuantity);
+            bidsBookLevels.add(level);
+        }
+        return new OrderBookSnapshot(bidsBookLevels, asksBookLevels);
     }
 
 

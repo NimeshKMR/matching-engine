@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 import org.junit.jupiter.api.Test;
 
 public class OrderBookDeterminism {
-    @Test
+@Test
 void sameOrderSequenceProducesSameState() {
 
     OrderBook book1 = new OrderBook();
