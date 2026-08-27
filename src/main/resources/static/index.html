@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matching Engine</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Matching Engine</h1>
+
+    <div class="main">
+        <section>
+            <h2>Place Order</h2>
+
+            <form id="order-form">
+                <label>
+                    Account ID
+                    <input id="accountID" type="number" min="1" required>
+                </label>
+
+                <div>
+                    <span>Side</span>
+                    <div class="button-group">
+                        <button type="button" class="side-button selected" data-side="BUY">BUY</button>
+                        <button type="button" class="side-button" data-side="SELL">SELL</button>
+                    </div>
+                </div>
+
+                <label>
+                    Type
+                    <select id="type">
+                        <option value="LIMIT">LIMIT</option>
+                        <option value="MARKET">MARKET</option>
+                    </select>
+                </label>
+
+                <label>
+                    Quantity
+                    <input id="quantity" type="number" min="1" required>
+                </label>
+
+                <label id="price-row">
+                    Price
+                    <input id="price" type="number" min="0" step="0.01">
+                </label>
+
+                <button type="submit">Place Order</button>
+            </form>
+
+            <h2>Cancel Order</h2>
+
+            <form id="cancel-form">
+                <label>
+                    Order ID
+                    <input id="cancelOrderID" type="number" min="1" required>
+                </label>
+
+                <label>
+                    Account ID
+                    <input id="cancelAccountID" type="number" min="1" required>
+                </label>
+
+                <button type="submit">Cancel Order</button>
+            </form>
+        </section>
+
+        <section>
+            <h2>Order Book</h2>
+
+            <div class="book">
+                <div>
+                    <h3>Bids</h3>
+                    <div id="bids"></div>
+                </div>
+
+                <div>
+                    <h3>Asks</h3>
+                    <div id="asks"></div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <section>
+        <h2>Last Operation</h2>
+        <div id="result"></div>
+    </section>
+
+    <script src="app.js"></script>
+</body>
+</html>
